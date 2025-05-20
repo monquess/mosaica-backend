@@ -1,0 +1,47 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["typedSql"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(255)
+  email     String   @unique @db.VarChar(255)
+  password  String?  @db.VarChar(60)
+  verified  Boolean  @default(false)
+  avatar    String   @db.VarChar(255)
+  provider  Provider @default(LOCAL)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Notification {
+  id      Int              @id @default(autoincrement())
+  user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int              @map("user_id")
+  message String           @db.Text
+  isRead  Boolean          @default(false)
+  type    NotificationType
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+}
+
+enum Provider {
+  LOCAL
+  GOOGLE
+}
+
+enum NotificationType {
+  DONTKNOWYET
+}
