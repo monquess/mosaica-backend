@@ -20,6 +20,7 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   notifications Notification[]
+  projects      Project[]
 
   @@map("users")
 }
@@ -35,6 +36,20 @@ model Notification {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("notifications")
+}
+
+model Project {
+  id          Int     @id @default(autoincrement())
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int     @map("user_id")
+  title       String  @db.VarChar(50)
+  description String?
+  content     Json
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("projects")
 }
 
 enum Provider {

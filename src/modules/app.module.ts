@@ -15,6 +15,7 @@ import {
 	MailConfigFactory,
 	BullConfigFactory,
 } from './config/factories';
+import { ProjectModule } from './project/project.module';
 
 @Module({
 	imports: [
@@ -44,6 +45,7 @@ import {
 		AuthModule,
 		S3Module,
 		NotificationModule,
+		ProjectModule,
 	],
 	providers: [
 		{
