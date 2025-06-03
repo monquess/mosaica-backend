@@ -28,28 +28,31 @@ export class ProjectEntity {
 	description?: string | null;
 
 	@ApiProperty({
+		type: Number,
+		example: 800,
+	})
+	width: number;
+
+	@ApiProperty({
+		type: Number,
+		example: 600,
+	})
+	height: number;
+
+	@ApiProperty({
 		type: Object,
-		example: {
-			attrs: { width: 800, height: 600 },
-			className: 'Stage',
-			children: [
-				{
-					className: 'Layer',
-					children: [
-						{
-							className: 'Rect',
-							attrs: {
-								x: 20,
-								y: 20,
-								width: 100,
-								height: 100,
-								fill: 'red',
-							},
-						},
-					],
+		example: [
+			{
+				className: 'Rect',
+				attrs: {
+					x: 20,
+					y: 20,
+					width: 100,
+					height: 100,
+					fill: 'red',
 				},
-			],
-		},
+			},
+		],
 	})
 	content: Prisma.JsonValue;
 

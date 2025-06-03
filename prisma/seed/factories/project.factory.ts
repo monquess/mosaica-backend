@@ -22,27 +22,20 @@ class ProjectFactory extends Factory<Prisma.ProjectCreateManyInput> {
 			this._data.push({
 				title: faker.lorem.words({ min: 2, max: 5 }),
 				description: faker.lorem.paragraphs({ min: 1, max: 3 }),
-				content: {
-					attrs: { width: 800, height: 600 },
-					className: 'Stage',
-					children: [
-						{
-							className: 'Layer',
-							children: [
-								{
-									className: 'Rect',
-									attrs: {
-										x: 20,
-										y: 20,
-										width: 100,
-										height: 100,
-										fill: 'red',
-									},
-								},
-							],
+				content: [
+					{
+						className: 'Rect',
+						attrs: {
+							x: 20,
+							y: 20,
+							width: 100,
+							height: 100,
+							fill: 'red',
 						},
-					],
-				},
+					},
+				],
+				width: faker.number.int({ min: 600, max: 1200 }),
+				height: faker.number.int({ min: 400, max: 800 }),
 				userId: user.id,
 			});
 		}

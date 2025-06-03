@@ -44,6 +44,8 @@ model Project {
   userId      Int     @map("user_id")
   title       String  @db.VarChar(50)
   description String?
+  width       Int     @default(800)
+  height      Int     @default(800)
   content     Json
 
   createdAt DateTime @default(now()) @map("created_at")
