@@ -47,6 +47,7 @@ model Project {
   width       Int     @default(800)
   height      Int     @default(800)
   content     Json
+  isTemplate  Boolean @default(false) @map("is_template")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

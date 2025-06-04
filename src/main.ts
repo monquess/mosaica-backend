@@ -27,6 +27,7 @@ async function bootstrap() {
 
 	app.enableCors(corsOptions);
 
+	app.useBodyParser('json', { limit: '50mb' });
 	app.use(cookieParser());
 	app.useGlobalPipes(
 		new ValidationPipe({

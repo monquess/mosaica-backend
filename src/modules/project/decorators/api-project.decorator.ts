@@ -17,6 +17,12 @@ export const ApiProjectFindAll = () =>
 		ApiPaginatedResponse<ProjectEntity>(ProjectEntity)
 	);
 
+export const ApiProjectFindAllTemplates = () =>
+	applyDecorators(
+		ApiOperation({ summary: 'Get paginated templates' }),
+		ApiPaginatedResponse<ProjectEntity>(ProjectEntity)
+	);
+
 export const ApiProjectFindById = () =>
 	applyDecorators(
 		ApiAuth(),
@@ -42,6 +48,18 @@ export const ApiProjectCreate = () =>
 		}),
 		ApiNotFoundResponse({
 			description: 'User not found',
+		})
+	);
+
+export const ApiProjectCreateFromTemplate = () =>
+	applyDecorators(
+		ApiAuth(),
+		ApiOperation({ summary: 'Create project from template' }),
+		ApiCreatedResponse({
+			type: ProjectEntity,
+		}),
+		ApiNotFoundResponse({
+			description: 'Template not found',
 		})
 	);
 

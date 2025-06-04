@@ -4,6 +4,9 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectEntity } from './entities/project.entity';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { getPaginationMeta, Paginated, PaginationOptionsDto } from '@common/pagination';
+import { Prisma, User } from '@prisma/client';
+import { ProjectFilteringOptionsDto } from './dto/filtering-options.dto';
+import { CreateFromTemplateDto } from './dto/create-from-template.dto';
 
 @Injectable()
 export class ProjectService {
@@ -28,6 +31,29 @@ export class ProjectService {
 		};
 	}
 
+	async findAllTemplates(
+		{ title }: ProjectFilteringOptionsDto,
+		{ page, limit }: PaginationOptionsDto
+	): Promise<Paginated<ProjectEntity>> {
+		const where: Prisma.ProjectWhereInput = {
+			AND: [{ isTemplate: true }, { title: { contains: title, mode: 'insensitive' } }],
+		};
+
+		const [projects, count] = await this.prisma.$transaction([
+			this.prisma.project.findMany({
+				where,
+				skip: (page - 1) * limit,
+				take: limit,
+			}),
+			this.prisma.project.count({ where }),
+		]);
+
+		return {
+			data: projects,
+			meta: getPaginationMeta(count, page, limit),
+		};
+	}
+
 	async findById(id: number, userId: number): Promise<ProjectEntity> {
 		return this.prisma.project.findFirstOrThrow({
 			where: { id, userId },
@@ -37,6 +63,26 @@ export class ProjectService {
 	async create(dto: CreateProjectDto, userId: number): Promise<ProjectEntity> {
 		return this.prisma.project.create({
 			data: { ...dto, userId },
+		});
+	}
+
+	async createFromTemplate(
+		id: number,
+		dto: CreateFromTemplateDto,
+		user: User
+	): Promise<ProjectEntity> {
+		const template = await this.prisma.project.findUniqueOrThrow({
+			where: { id },
+		});
+
+		return this.prisma.project.create({
+			data: {
+				...dto,
+				content: template.content as Prisma.InputJsonValue,
+				width: template.width,
+				height: template.height,
+				userId: user.id,
+			},
 		});
 	}
 
