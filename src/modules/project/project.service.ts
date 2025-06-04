@@ -72,7 +72,7 @@ export class ProjectService {
 		user: User
 	): Promise<ProjectEntity> {
 		const template = await this.prisma.project.findUniqueOrThrow({
-			where: { id },
+			where: { id, isTemplate: true },
 		});
 
 		return this.prisma.project.create({
