@@ -57,6 +57,12 @@ export class ProjectEntity {
 	content: Prisma.JsonValue;
 
 	@ApiProperty({
+		example: true,
+		type: Boolean,
+	})
+	isTemplate: boolean;
+
+	@ApiProperty({
 		example: '2025-03-09T16:17:53.019Z',
 		type: String,
 	})

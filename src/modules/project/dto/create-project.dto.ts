@@ -1,7 +1,7 @@
 import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateProjectDto {
 	@ApiProperty({
@@ -53,4 +53,12 @@ export class CreateProjectDto {
 	@IsNotEmpty()
 	@IsArray()
 	content: Prisma.InputJsonValue;
+
+	@ApiProperty({
+		example: true,
+		type: Boolean,
+	})
+	@Optional()
+	@IsBoolean()
+	isTemplate?: boolean;
 }

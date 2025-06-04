@@ -7,10 +7,15 @@ import { getPaginationMeta, Paginated, PaginationOptionsDto } from '@common/pagi
 import { Prisma, User } from '@prisma/client';
 import { ProjectFilteringOptionsDto } from './dto/filtering-options.dto';
 import { CreateFromTemplateDto } from './dto/create-from-template.dto';
+import { S3Service } from '@modules/s3/s3.service';
+import { StoragePath } from '@modules/s3/enum/storage-path.enum';
 
 @Injectable()
 export class ProjectService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly s3Service: S3Service
+	) {}
 
 	async findAll(
 		{ page, limit }: PaginationOptionsDto,
@@ -84,6 +89,12 @@ export class ProjectService {
 				userId: user.id,
 			},
 		});
+	}
+
+	async uploadShare(id: number, image: Express.Multer.File) {
+		const imageData = await this.s3Service.uploadFile(StoragePath.SHARES, image);
+
+		return imageData.url;
 	}
 
 	async update(

@@ -1,4 +1,4 @@
-import { CurrentUser, Public } from '@common/decorators';
+import { CurrentUser, Public, UploadedImage } from '@common/decorators';
 import {
 	Body,
 	Controller,
@@ -11,6 +11,7 @@ import {
 	Patch,
 	Post,
 	Query,
+	UseInterceptors,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { ProjectService } from './project.service';
@@ -29,6 +30,7 @@ import {
 } from './decorators/api-project.decorator';
 import { ProjectFilteringOptionsDto } from './dto/filtering-options.dto';
 import { CreateFromTemplateDto } from './dto/create-from-template.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('projects')
 export class ProjectController {
@@ -79,6 +81,19 @@ export class ProjectController {
 		@CurrentUser() user: User
 	): Promise<ProjectEntity> {
 		return this.projectService.createFromTemplate(id, createFromTemplateDto, user);
+	}
+
+	@Post(':id/share')
+	@UseInterceptors(FileInterceptor('image'))
+	uploadShare(
+		@Param('id', ParseIntPipe) id: number,
+		@UploadedImage({
+			width: 400,
+			height: 400,
+		})
+		image: Express.Multer.File
+	) {
+		return this.projectService.uploadShare(id, image);
 	}
 
 	@ApiProjectUpdate()
