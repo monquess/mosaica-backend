@@ -87,10 +87,7 @@ export class ProjectController {
 	@UseInterceptors(FileInterceptor('image'))
 	uploadShare(
 		@Param('id', ParseIntPipe) id: number,
-		@UploadedImage({
-			width: 400,
-			height: 400,
-		})
+		@UploadedImage()
 		image: Express.Multer.File
 	) {
 		return this.projectService.uploadShare(id, image);
