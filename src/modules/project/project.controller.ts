@@ -96,6 +96,16 @@ export class ProjectController {
 		return this.projectService.uploadShare(id, image);
 	}
 
+	@Post(':id/preview')
+	@UseInterceptors(FileInterceptor('preview'))
+	uploadPreview(
+		@Param('id', ParseIntPipe) id: number,
+		@UploadedImage()
+		preview: Express.Multer.File
+	) {
+		return this.projectService.uploadPreview(id, preview);
+	}
+
 	@ApiProjectUpdate()
 	@Patch(':id')
 	update(

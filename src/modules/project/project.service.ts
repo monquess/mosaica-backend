@@ -97,6 +97,17 @@ export class ProjectService {
 		return imageData.url;
 	}
 
+	async uploadPreview(id: number, preview: Express.Multer.File) {
+		const previewData = await this.s3Service.uploadFile(StoragePath.PREVIEWS, preview);
+
+		await this.prisma.project.update({
+			where: { id },
+			data: { previewUrl: previewData.url },
+		});
+
+		return previewData.url;
+	}
+
 	async update(
 		id: number,
 		dto: UpdateProjectDto,
